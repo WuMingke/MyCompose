@@ -10,7 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -54,11 +54,81 @@ class LayoutWidgetActivity : ComponentActivity() {
                     )
                 }) {
 //                ConsLayout()
-                MyLazyColumn()
+//                MyLazyColumn()
+                BottomNavigationTest()
             }
         }
     }
 
+}
+
+@Composable
+fun BottomNavigationTest() {
+    val tabs = MyTabs.values()
+    var position by remember { mutableStateOf(MyTabs.ONE) }
+    Scaffold(
+        backgroundColor = Color.Yellow,
+        bottomBar = {
+            BottomNavigation {
+                tabs.forEach {
+                    BottomNavigationItem(
+                        modifier = Modifier.background(Color.Cyan),
+                        label = { Text(text = it.title) },
+                        selected = it == position,
+                        onClick = { position = it },
+                        icon = {},
+                        alwaysShowLabel = false
+                    )
+                }
+            }
+        }) {
+        when (position) {
+            MyTabs.ONE -> TabOne()
+            MyTabs.TWO -> TabTwo()
+            MyTabs.THREE -> TabThree()
+            MyTabs.FOUR -> TabFour()
+        }
+    }
+
+
+}
+
+@Composable
+fun TabOne() {
+    BaseDefault(content = "One")
+}
+
+@Composable
+fun TabTwo() {
+    BaseDefault(content = "Two")
+}
+
+@Composable
+fun TabThree() {
+    BaseDefault(content = "Three")
+}
+
+@Composable
+fun TabFour() {
+    BaseDefault(content = "Four")
+}
+
+@Composable
+fun BaseDefault(content: String) {
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(text = content)
+    }
+}
+
+enum class MyTabs(val title: String) {
+    ONE("One"),
+    TWO("Two"),
+    THREE("Three"),
+    FOUR("Four")
 }
 
 @OptIn(ExperimentalFoundationApi::class)

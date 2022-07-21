@@ -26,12 +26,19 @@
         <activity
             android:name=".basewidget.LayoutWidgetActivity"
             android:exported="true">
+
+
+        </activity>
+
+        <activity
+            android:name=".basewidget.CustomViewActivity"
+            android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 
