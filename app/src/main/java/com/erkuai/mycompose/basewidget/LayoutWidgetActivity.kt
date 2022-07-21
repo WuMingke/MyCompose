@@ -3,12 +3,13 @@ package com.erkuai.mycompose.basewidget
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,15 +37,57 @@ class LayoutWidgetActivity : ComponentActivity() {
 //                }
 //            }
 
-            Scaffold(topBar = {
-                TopAppBar() {
-
-                }
-            }) {
-                ConsLayout()
+            Scaffold(
+                topBar = {
+                    TopAppBar(
+                        title = {
+                            Text(text = "标题")
+                        },
+                        navigationIcon = {
+                            IconButton(
+                                onClick = {
+                                    finish()
+                                }) {
+                                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "")
+                            }
+                        }
+                    )
+                }) {
+//                ConsLayout()
+                MyLazyColumn()
             }
         }
     }
+
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun MyLazyColumn() {
+    val dataList = arrayListOf<Int>().apply {
+        for (index in 0..100) {
+            add(index)
+        }
+    }
+
+    LazyColumn(
+        modifier = Modifier
+            .background(Color.Cyan)
+            .fillMaxWidth(),
+        content = {
+            items(dataList.size, key = { index -> index }) { data ->
+                Text(text = "$data")
+            }
+
+            stickyHeader {
+                Text(text = "粘性标题")
+            }
+
+            items(dataList.size) { data ->
+                Text(text = "$data")
+            }
+        }
+    )
 
 }
 
