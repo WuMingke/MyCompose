@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MyCompose</string>
+    <string name="string_visible_animation">可见性动画</string>
 </resources>
