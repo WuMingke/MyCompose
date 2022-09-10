@@ -1,0 +1,29 @@
+概念
+依赖 demo
+控件 Modifier
+Activity setContent ； ComposeView AndroidView 交互
+mutableState、mutableStateOf()、remember
+状态提升
+MVI
+
+
+
+
+
+
+控件 Modifier
+    自定义@Composable，@Composable只能在@Composable中调用，同suspend
+        内部只能调用一个Composable函数，否则不能控制布局
+
+更新界面：mutableState、mutableStateOf()
+    =、 by、remember
+    mutableState 不能被订阅，真正被订阅的是StateObject
+
+
+
+
+
+
+// 手势 动画 自定义View ？？
+
+https://github.com/google/accompanist
