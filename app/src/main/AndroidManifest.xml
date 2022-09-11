@@ -53,7 +53,7 @@
 
 
         <activity
-            android:name=".test.TestStateActivity"
+            android:name=".test.TestModifierActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
