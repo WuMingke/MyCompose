@@ -21,8 +21,34 @@ interface Element : Modifier {}
 then 的合并 CombinedModifier
 any all 两个方法，其实就是为了做匹配
 foldIn 顺序的 foldOut 逆序的   遍历
-// ComposedModifier？
+// ComposedModifier ？
 LayoutModifier
 LayoutNode
-remeasure relayout
+    remeasure relayout
+InnerPlaceable
+LayoutNode的Modifier
+
+不设置 LayoutModifier：
+outerWrapper = innerLayoutNodeWrapper -> 测量Composable
+设置一个 LayoutModifier：
+outerWrapper = ModifierLayoutNode(LayoutModifier + innerLayoutNodeWrapper)
+设置了两个 LayoutModifier：
+outerWrapper = ModifierLayoutNode(LayoutModifier + ModifierLayoutNode(LayoutModifier + innerLayoutNodeWrapper))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

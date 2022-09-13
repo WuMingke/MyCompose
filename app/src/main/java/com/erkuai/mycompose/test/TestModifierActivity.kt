@@ -9,14 +9,18 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.AlignmentLine
-import androidx.compose.ui.layout.LayoutModifier
-import androidx.compose.ui.layout.MeasureResult
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.updateBounds
+import com.erkuai.mycompose.R
 
 class TestModifierActivity : ComponentActivity() {
 
@@ -27,9 +31,9 @@ class TestModifierActivity : ComponentActivity() {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 //                MyColumn()
 //                MyConstraintLayout()
-//                SameParam()
+                SameParam()
 //                MyLayout()
-                MyPadding()
+//                MyPadding()
             }
         }
 
@@ -96,8 +100,8 @@ fun SameParam() {
             modifier = Modifier
 //                .size(100.dp)
 //                .size(50.dp)
-//                .background(color = Color.Red)
-//                .background(color = Color.Blue)
+                .background(color = Color.Red)
+                .background(color = Color.Blue)
 
         )
     }
@@ -105,6 +109,17 @@ fun SameParam() {
 }
 
 // part 3  .9图
+@Composable
+fun MyNinePatch() {
+    val image = ContextCompat.getDrawable(LocalContext.current, R.drawable.message_gz_qinmz)
+    Text(text = "1111111111111111", fontSize = 12.sp, modifier = Modifier
+        .drawBehind {
+            image?.updateBounds(0, 0, size.width.toInt(), size.height.toInt())
+            image?.draw(drawContext.canvas.nativeCanvas)
+        }
+        .padding(start = 50.dp, end = 8.dp)
+        .height(16.dp))
+}
 
 // part 2
 @Composable
