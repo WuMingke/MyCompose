@@ -30,8 +30,8 @@ class TestModifierActivity : ComponentActivity() {
         setContent {
             Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
 //                MyColumn()
-//                MyConstraintLayout()
-                SameParam()
+                MyConstraintLayout()
+//                SameParam()
 //                MyLayout()
 //                MyPadding()
             }
@@ -64,7 +64,7 @@ fun MyPadding() {
         })
 
         // 等同于
-//        Modifier.padding(10.dp)
+        Modifier.padding(10.dp)
     }
 
 }
@@ -89,7 +89,7 @@ fun MyModifier(modifier: Modifier = Modifier) { //
 
 // part 4
 @Composable
-fun SameParam() {
+fun SameParam(modifier: Modifier = Modifier) {
     Box(
         modifier = Modifier
             .background(Color.Red)
@@ -97,7 +97,7 @@ fun SameParam() {
     ) {
         Text(
             text = "123",
-            modifier = Modifier
+            modifier = modifier
 //                .size(100.dp)
 //                .size(50.dp)
                 .background(color = Color.Red)
@@ -112,6 +112,10 @@ fun SameParam() {
 @Composable
 fun MyNinePatch() {
     val image = ContextCompat.getDrawable(LocalContext.current, R.drawable.message_gz_qinmz)
+//    Box{
+//        image
+//        Text(text = )
+//    }
     Text(text = "1111111111111111", fontSize = 12.sp, modifier = Modifier
         .drawBehind {
             image?.updateBounds(0, 0, size.width.toInt(), size.height.toInt())
@@ -129,23 +133,17 @@ fun MyConstraintLayout() {
         createHorizontalChain(nick, age, chainStyle = ChainStyle.Packed)
         Text(text = "nickNick", modifier = Modifier
             .constrainAs(nick) {
-//                top.linkTo(parent.top)  // 这两个都不用写约束，Chain已经实现了
-//                bottom.linkTo(parent.bottom)
-//                start.linkTo(parent.start)
-//                end.linkTo(age.start)
             }
-            .height(80.dp)  // 如果height比padding小？
-            .padding(top = 50.dp)
-            .background(color = Color.Blue))
+            .height(50.dp)  // 如果height比padding小？
+            .background(color = Color.Blue)
+            .height(80.dp))
+
+
         Text(text = "nameName", modifier = Modifier
             .constrainAs(age) {
-                top.linkTo(nick.top) // 实际没有加padding的对齐
-//                top.linkTo(nick.top, margin = 50.dp) // 1
-//                Modifier.padding(top = 50.dp)        // 2 要么更上面一样写padding属性
-//                bottom.linkTo(nick.bottom)
-//                start.linkTo(nick.end)
-//                end.linkTo(parent.end)
             }
+            .height(80.dp)
+            .padding(top = 50.dp)
             .background(color = Color.Red))
 
     }
@@ -156,13 +154,13 @@ fun MyConstraintLayout() {
 @Composable
 fun MyColumn() {
     Column {
-        Text(
-            text = "111111",
-            modifier = Modifier
-                .padding(top = 10.dp)
-                .background(color = Color.Yellow)
-                .padding(top = 20.dp)
-        )
+//        Text(
+//            text = "111111",
+//            mod1 = Modifier
+//                .padding(top = 10.dp)
+//                .background(color = Color.Yellow)
+//                .padding(top = 20.dp)
+//        )
 //        Text(
 //            text = "222222",
 //            modifier = Modifier.background(color = Color.Blue)
