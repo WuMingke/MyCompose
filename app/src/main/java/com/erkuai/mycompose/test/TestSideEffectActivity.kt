@@ -1,19 +1,25 @@
 package com.erkuai.mycompose.test
 
 import android.os.Bundle
-import android.widget.Button
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class TestSideEffectActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        // 维基百科：https://zh.m.wikipedia.org/zh-sg/%E5%89%AF%E4%BD%9C%E7%94%A8_(%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6)
+        // 附带效应
         // 副作用：函数的副作用，它的执行会修改外部的变量，实际是改变程序外部状态的行为
         setContent {
             SideEffect {
@@ -21,7 +27,17 @@ class TestSideEffectActivity : ComponentActivity() {
             }
 
             TestDisposableEffect()
+
+
+            Button(onClick = { /*TODO*/ }, modifier = Modifier.clickable {
+                lifecycleScope.launch {
+
+                }
+            }) {
+
+            }
         }
+
     }
 
 
@@ -30,13 +46,13 @@ class TestSideEffectActivity : ComponentActivity() {
     }
 
     fun b() {
-        var isBig = false
-        isBig = true
+        var isToday = false
+        isToday = true
     }
 
-    var isSmall = false
+    var isToday = false
     fun c() {
-        isSmall = true
+        isToday = true
     }
 
     // 以下这个打印，也是属于副作用
@@ -53,22 +69,34 @@ class TestSideEffectActivity : ComponentActivity() {
 
     // 有什么用：
     // @Composable 函数都是无副作用的，这是框架要求的，如果有副作用，那会导致程序的行为不可预期
+    // @Composable 函数是用来展示界面的，且单纯用来展示界面，而不能掺杂其它的逻辑，这个其它逻辑就是指的对外籍有影响的事情，就是副作用
     // 为什么程序的行为不可预期？因为它的调用不可预期 -> 主要是优化了重组的行为
+    // @Composable 函数可能在执行了一半的时候被取消，那么假如有两段副作用代码，前面一段执行了，后面一段没执行，那么就会导致程序出错
+    //             这是一种情况，还比如，函数内多次调用
     // eg：HasSideEffect()
 
-    // 不要在 @Composable 函数里面写有副作用的代码
+    // 不要在 @Composable 函数里面写有副作用的代码，但是确实需要的时候怎么办？比如事件埋点
 
     // 最直接解决：SideEffect
-    // 保证 {} 里面包裹的代码执行完，再来判断中途是否有新的重组，然后再做新的更新
+    // 在每次重组的过程中，保证 {} 里面包裹的代码不会先执行，而是等着外层 {} 所有的代码在这一轮重组时执行完，再来判断中途是否有新的重组，然后再做新的更新
+    // （本质上是一个回调！！）
+    // eg:SolveSideEffect()
 
     // DisposableEffect -> 可丢弃的 SideEffect，加了一个离开界面的回调
-    // eg:TestDisposableEffect
+    // 什么叫可丢弃的？
+    // var show = true
+    // if (show){
+    //    Text("")
+    //    DisposableEffect(,,)
+    // }
+    // {} 里面当 show 为 false 的时候，就离开了组合，它里面的内容就是可丢弃的
+    // eg:TestDisposableEffect()、TestDisposableEffect2()
 
-    // LaunchedEffect -> 同 DisposableEffect ，只是 LaunchedEffect 是面对协程的
+    // LaunchedEffect -> 同 DisposableEffect ，只是 LaunchedEffect 是面对协程的,源码都差不多
     // eg:TestLaunchedEffect
     // Compose 里面写协程的2种方式 ：LaunchedEffect,rememberCoroutineScope
 
-    // rememberUpdatedState ???不懂
+    // rememberUpdatedState // 难的地方
 
     // rememberCoroutineScope
 
@@ -76,13 +104,67 @@ class TestSideEffectActivity : ComponentActivity() {
 }
 
 @Composable
-fun TestLaunchedEffect() {
+fun TestRememberCoroutineScope() {
 
-    LaunchedEffect(Unit) {
+    val scope = rememberCoroutineScope()
+    remember {
+        scope.launch {
+
+        }
+    }
+
+    // 其实就是 LaunchedEffect 的实现：
+    // 1、提供 CoroutineScope 启动协程
+    // 2、remember 包裹，防止反复执行
+
+    // rememberCoroutineScope 的意义在于，解决 非 Composable 函数里面使用协程
+    Button(onClick = { /*TODO*/ }, modifier = Modifier.clickable {
+        scope.launch {
+
+        }
+
+        // 也可以：
+//        lifecycleScope.launch {
+//
+//        }
+        // 但是"生命周期"变大了
+    }) {
 
     }
 
-//    rememberUpdatedState(newValue = )
+
+}
+
+@Composable
+fun TestRememberUpdatedState() {
+
+    // LaunchedEffect key不改变不重启，保证性能，
+
+    var show by remember { mutableStateOf(false) }
+    val content by remember { mutableStateOf("Hello") }
+    LaunchedEffect(show) {
+        delay(3000)
+        println("content:$content")
+    }
+    // 像这种情况，show 改变了，但是 {} 里面的内容本来也没更新，没必要重启更新，怎么办
+    // 因为这里有延时，我只需要在延时之后拿到最新的值就行了
+    // 也就是说 show 改变了 不更新 {} 怎么做
+
+    // -> rememberUpdatedState
+}
+
+@Composable
+fun TestLaunchedEffect() {
+
+    LaunchedEffect(Unit) {
+        // "onDispose" 在这里是取消协程
+    }
+
+    // 根据之前的结论，那么在这里 Compose 里面使用协程，其实是
+    // 1、在 Composable 组件显示完成之后，去启动一个协程
+    // 2、在 key 发生改变的时候，去重启协程
+    // 场景：弹窗显示3s之后消失 之类的，包括 Compose 里面的动画实现，都有协程的身影
+
 }
 
 @Composable
@@ -95,8 +177,33 @@ fun TestDisposableEffect() {
                 println("离开界面了")
             }
         }
+        // 对于key参数：用来判断是否 {} 需要重新执行，并且 onDispose 里面的代码会先执行
+        // key 变->重新执行，key 不变->不重新执行  : eg:TestDisposableEffect2()
     }
 
+}
+
+@Composable
+fun TestDisposableEffect2() {
+    // 重组作用域：非inline且无返回值的Composable函数或lambda
+    var show by remember { mutableStateOf(false) }
+    Button(onClick = { show = !show }) {
+        Text(text = "111")
+        if (show) {
+            Text(text = "2222")
+        }
+
+        SideEffect {
+            println("111 进入界面了") // 一定会重复执行
+        }
+
+        DisposableEffect(Unit) {
+            println("222 进入界面了")
+            onDispose {
+                println("222 离开界面了")
+            }
+        }
+    }
 }
 
 @Composable
@@ -104,8 +211,23 @@ fun HasSideEffect() {
     var count = 0
     Column {
         for (i in 0 until 3) {
-            count++
+            count++  // 副作用代码
         }
     }
     Text(text = "$count") // Column 如果发生多次重组，那么count的值不可预期
 }
+
+@Composable
+fun SolveSideEffect() {
+    var count = 0
+    Column {
+        for (i in 0 until 3) {
+            SideEffect { // 这样是不对的，因为 {} 包裹的代码会在重组结束之后执行
+                count++  // 这里的最好做法是将数据提前处理好，再把它传进来
+            }            // 大原则就是把业务处理和界面显示的逻辑分开！！！
+        }
+    }
+    Text(text = "$count")
+}
+
+// demo：https://developer.android.com/codelabs/jetpack-compose-advanced-state-side-effects?hl=zh-cn#3
