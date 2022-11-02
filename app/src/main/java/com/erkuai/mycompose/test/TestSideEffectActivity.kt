@@ -64,9 +64,14 @@ class TestSideEffectActivity : ComponentActivity() {
     // DisposableEffect -> 可丢弃的 SideEffect，加了一个离开界面的回调
     // eg:TestDisposableEffect
 
-    // LaunchedEffect ->
+    // LaunchedEffect -> 同 DisposableEffect ，只是 LaunchedEffect 是面对协程的
     // eg:TestLaunchedEffect
     // Compose 里面写协程的2种方式 ：LaunchedEffect,rememberCoroutineScope
+
+    // rememberUpdatedState ???不懂
+
+    // rememberCoroutineScope
+
 
 }
 
@@ -76,6 +81,8 @@ fun TestLaunchedEffect() {
     LaunchedEffect(Unit) {
 
     }
+
+//    rememberUpdatedState(newValue = )
 }
 
 @Composable
