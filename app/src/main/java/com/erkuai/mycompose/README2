@@ -4,7 +4,7 @@ padding margin ?
 
 相同的属性，比如 Modifier.size(100.dp).size(50.dp)  ?   比如说modifier作为参数传递的时候
 
-1'伴身对象 最基本的实现
+1'伴生对象 最基本的实现
 2'顺序敏感是怎么实现的？
 
 

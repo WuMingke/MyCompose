@@ -82,7 +82,7 @@ fun TestSwipeable() {
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun TestAnimation() {
+inline fun TestAnimation() {
     var visible by remember { mutableStateOf(true) }
 
     Column(

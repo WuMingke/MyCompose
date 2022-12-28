@@ -27,3 +27,15 @@ MVI
 // 手势 动画 自定义View ？？
 
 https://github.com/google/accompanist
+
+
+自定义View：3种方式
+    1、Modifier.drawBehind
+    2、Modifier.drawWithContent
+    3、Canvas
+
+    drawIntoCanvas 下沉到原生的Canvas
+
+自定义布局：
+
+

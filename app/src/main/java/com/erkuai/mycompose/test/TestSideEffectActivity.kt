@@ -10,6 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -34,8 +35,8 @@ class TestSideEffectActivity : ComponentActivity() {
 
 //            TestDisposableEffect()
 //            TestDisposableEffect2()
-
             TestRememberUpdatedState2()
+//            TestRememberUpdatedState2()
 
 //            Button(onClick = { /*TODO*/ }, modifier = Modifier.clickable {
 //                lifecycleScope.launch {
@@ -49,7 +50,7 @@ class TestSideEffectActivity : ComponentActivity() {
     }
 
 
-    fun a() {
+    fun a() :Unit{
 
     }
 
@@ -131,7 +132,7 @@ fun TestRememberCoroutineScope() {
     // rememberCoroutineScope 的意义在于，解决 非 Composable 函数里面使用协程
     Button(onClick = { /*TODO*/ }, modifier = Modifier.clickable {
         scope.launch {
-
+            delay(2000)
         }
 
         // 也可以：
@@ -152,20 +153,31 @@ fun TestRememberUpdatedState2() {
     var content by remember { mutableStateOf("Hello") }
     Button(onClick = { content = "bye" }) {
         Text(text = content)
+
 //        LaunchedEffect(Unit) {
 //            delay(3000)
 //            println("content:$content")
 //        }
-//        InnerLaunchedEffect(content = content)
-        InnerLaunchedEffect2(content = content)
+        InnerLaunchedEffect(content = content)
+//        InnerLaunchedEffect2(content = content)
     }
 }
 
 @Composable
+fun <T> rememberUpdatedState(newValue: T): State<T> = remember {
+    mutableStateOf(newValue)
+}.apply { value = newValue }
+
+@Composable
 fun InnerLaunchedEffect(content: String) {
+
+    var newContent by remember { mutableStateOf(content) }
+    newContent = content
+
+    val newContent2 by rememberUpdatedState(newValue = content)
     LaunchedEffect(Unit) {
         delay(3000)
-        println("content:$content")
+        println("content:$newContent2")
     }
 }
 
@@ -189,7 +201,7 @@ fun TestRememberUpdatedState() {
 
     var show by remember { mutableStateOf(false) }
     val content by remember { mutableStateOf("Hello") }
-    LaunchedEffect(show) {
+    LaunchedEffect(Unit) {
         delay(2000)
         println("content:$content")
     }
@@ -207,6 +219,8 @@ fun TestLaunchedEffect() {
 
     LaunchedEffect(Unit) {
         // "onDispose" 在这里是取消协程
+        delay(5000)
+
     }
 
     // 根据之前的结论，那么在这里 Compose 里面使用协程，其实是
@@ -220,8 +234,10 @@ fun TestLaunchedEffect() {
 fun TestDisposableEffect() {
 
     Button(onClick = { /*TODO*/ }) {
+
         DisposableEffect(Unit) { // 所在的 @Composable 组件在某一时刻出现在界面，然后又因为某些条件不显示了
-            println("进入界面了")
+            println("进入界面了") // eventbus
+
             onDispose {
                 println("离开界面了")
             }
@@ -233,7 +249,7 @@ fun TestDisposableEffect() {
 }
 
 @Composable
-fun TestDisposableEffect2() {
+ fun TestDisposableEffect2() {
     // 重组作用域：非inline且无返回值的Composable函数或lambda
     var show by remember { mutableStateOf(false) }
     Button(onClick = { show = !show }) {
@@ -248,6 +264,7 @@ fun TestDisposableEffect2() {
 
         DisposableEffect(Unit) {
             println("222 进入界面了")
+//            delay(3000)
             onDispose {
                 println("222 离开界面了")
             }
@@ -262,6 +279,7 @@ fun HasSideEffect() {
         // 还有其它的代码执行
 
         //
+        //
         for (i in 0 until 3) {
             count++  // 副作用代码
         }
@@ -270,16 +288,20 @@ fun HasSideEffect() {
 }
 
 @Composable
-fun SolveSideEffect() {
+fun SolveSideEffect(viewModel: ViewModel) {
     var count = 0
     Column {
+
+        //
+
+        //
         for (i in 0 until 3) {
             SideEffect { // 这样是不对的，因为 {} 包裹的代码会在重组结束之后执行
                 count++  // 这里的最好做法是将数据提前处理好，再把它传进来
             }            // 大原则就是把业务处理和界面显示的逻辑分开！！！
         }
     }
-    Text(text = "$count")
+    Text(text = "$viewModel")
 }
 
 // demo：https://developer.android.com/codelabs/jetpack-compose-advanced-state-side-effects?hl=zh-cn#3
