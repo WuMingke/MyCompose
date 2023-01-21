@@ -9,8 +9,11 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -19,6 +22,7 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.layout.SubcomposeLayout
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -49,12 +53,60 @@ class TestCustomViewActivity : ComponentActivity() {
 //                Layout(measurePolicy = ,){
 //
 //                }
-                CustomLayout {
-                    Text(text = "123")
-                    Text(text = "456")
-                }
+//                CustomLayout {
+//                    Text(text = "123")
+//                    Text(text = "456")
+//                }
+
+                // 3.
+                SubcomposeLayoutTest()
             }
         }
+    }
+}
+
+@Composable
+fun SubcomposeLayoutTest() {
+
+    /**
+     * 布局流程：
+     * 组合（还没有发生测量，所以有关布局的数据拿不到）
+     * 测量
+     * 布局
+     * 绘制
+     *
+     * SubcomposeLayout 可以提前拿到测量阶段的数据
+     * 缺点是：
+     *   性能消耗比较大，因为混合了布局流程，高频的重复测量导致了高频的重组，导致了界面卡顿
+     */
+
+    BoxWithConstraints { // 最简单的 SubcomposeLayout 的包装
+        constraints // 可以获得 父组件的约束
+    }
+
+    SubcomposeLayout() { constraints ->
+        val measurable = subcompose(1) { // 1组合
+            Text(text = "")
+        }[0]
+
+        val placeable = measurable.measure(constraints) // 2测量
+
+        layout(placeable.width, placeable.height) { // 3布局
+            placeable.placeRelative(0, 0)
+        }
+
+        // SubcomposeLayout 提供了在测量过程中去自由地调配一个子界面的各个部分之间的组合、测量、布局过程的调用时机，
+        // 以此来提供动态化布局的功能
+    }
+
+    // eg:1
+//    Scaffold {
+//
+//    }
+
+    // eg:2
+    LazyColumn {
+
     }
 }
 
