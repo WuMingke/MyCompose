@@ -8,24 +8,20 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
-import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.SubcomposeLayout
-import androidx.compose.ui.layout.layout
+import androidx.compose.ui.layout.*
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.erkuai.mycompose.R
@@ -59,8 +55,54 @@ class TestCustomViewActivity : ComponentActivity() {
 //                }
 
                 // 3.
-                SubcomposeLayoutTest()
+//                SubcomposeLayoutTest()
+
+                // 4.
+                LookaheadLayoutTest()
             }
+        }
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun LookaheadLayoutTest() {
+    /**
+     * LookaheadLayout 主要用来做过渡动画的，类似于 传统的Transition Api
+     *  可以先拿到自己的预先的测量结果，然后根据这个测量结果，再测量自己
+     *
+     * 会经历两遍测量
+     *
+     */
+    LookaheadLayout({
+        Column {
+            Text(
+                "123",
+                Modifier
+//                    .layout { measurable, constraints ->
+//                        layout()
+//                    }
+                    .intermediateLayout { // 在第二遍测量的时候才会执行
+                            measurable, constraints, lookaheadSize ->
+                        val placeable = measurable.measure(Constraints.fixed(lookaheadSize.width, lookaheadSize.height * 2))
+                        layout(placeable.width, placeable.height) {
+                            placeable.placeRelative(0, 0)
+                        }
+                    }
+//                    .layout { measurable, constraints ->
+//                        layout()
+//                    }
+            )
+            Text(text = "456")
+        }
+    }) { measurables, constraints ->
+        val placeables = measurables.map {
+            it.measure(constraints)
+        }
+        val width = placeables.maxOf { it.width }
+        val height = placeables.maxOf { it.height }
+        layout(width, height) {
+            placeables.forEach { it.placeRelative(0, 0) }
         }
     }
 }
