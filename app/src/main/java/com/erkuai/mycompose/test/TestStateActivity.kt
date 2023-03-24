@@ -64,6 +64,8 @@ class TestStateActivity : ComponentActivity() {
                 delay(3000)
                 name = "Nicole"
             }
+
+            derivedStateOf {  }
 //            }
 
         }

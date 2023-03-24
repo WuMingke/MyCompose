@@ -1,5 +1,6 @@
 package com.erkuai.mycompose.basewidget
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.TestLooperManager
 import androidx.activity.ComponentActivity
@@ -25,6 +26,7 @@ import kotlin.math.roundToInt
 
 class AnimationActivity : ComponentActivity() {
 
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
