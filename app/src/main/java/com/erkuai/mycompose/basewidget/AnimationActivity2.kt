@@ -5,21 +5,21 @@ import android.util.Log
 import android.widget.OverScroller
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.*
 import androidx.compose.animation.core.*
-import androidx.compose.animation.rememberSplineBasedDecay
-import androidx.compose.animation.splineBasedDecay
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 
@@ -30,7 +30,65 @@ class AnimationActivity2 : ComponentActivity() {
 
 //        content1()
 //        content2()
-        content3()
+//        content3()
+//        content4()
+        content5()
+    }
+
+    private fun content5() {
+        setContent {
+            Column {
+                var shown by remember { mutableStateOf(true) }
+                Crossfade(targetState = shown, animationSpec = tween(3000)) {
+                    if (it) {
+                        Box(
+                            Modifier
+                                .size(50.dp)
+                                .background(Color.Red)
+                        ) {
+
+                        }
+                    } else {
+                        Box(
+                            Modifier
+                                .size(25.dp)
+                                .background(Color.Green)
+                        ) {
+
+                        }
+                    }
+                }
+
+                Button(onClick = { shown = !shown }) {
+                    Text(text = "change")
+                }
+            }
+
+        }
+    }
+
+    private fun content4() {
+        setContent {
+            var shown by remember { mutableStateOf(true) }
+            Column() {
+                AnimatedVisibility(
+                    visible = shown, enter = fadeIn(initialAlpha = 0.3f) + slideIn(tween()) { IntOffset(-it.width, -it.height) },
+                ) {
+                    Box(
+                        Modifier
+                            .size(50.dp)
+                            .background(Color.Red)
+                    ) {
+
+                    }
+                }
+                Button(onClick = { shown = !shown }) {
+                    Text(text = "change")
+                }
+
+            }
+
+        }
     }
 
     private fun content3() {
