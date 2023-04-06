@@ -12,8 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TestSideEffectActivity : ComponentActivity() {
 
@@ -50,7 +52,7 @@ class TestSideEffectActivity : ComponentActivity() {
     }
 
 
-    fun a() :Unit{
+    fun a(): Unit {
 
     }
 
@@ -119,8 +121,10 @@ fun TestRememberCoroutineScope() {
     val scope = rememberCoroutineScope()
 
     remember {
-        scope.launch {
+        scope.launch(Dispatchers.Main) {
+            withContext(Dispatchers.IO) {
 
+            }
         }
     }
 
@@ -164,9 +168,7 @@ fun TestRememberUpdatedState2() {
 }
 
 @Composable
-fun <T> rememberUpdatedState(newValue: T): State<T> = remember {
-    mutableStateOf(newValue)
-}.apply { value = newValue }
+fun <T> rememberUpdatedState(newValue: T): State<T> = remember { mutableStateOf(newValue) }.apply { value = newValue }
 
 @Composable
 fun InnerLaunchedEffect(content: String) {
@@ -249,7 +251,7 @@ fun TestDisposableEffect() {
 }
 
 @Composable
- fun TestDisposableEffect2() {
+fun TestDisposableEffect2() {
     // 重组作用域：非inline且无返回值的Composable函数或lambda
     var show by remember { mutableStateOf(false) }
     Button(onClick = { show = !show }) {

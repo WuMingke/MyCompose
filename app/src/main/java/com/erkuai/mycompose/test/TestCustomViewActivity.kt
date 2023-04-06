@@ -73,23 +73,24 @@ fun LookaheadLayoutTest() {
      *
      * 会经历两遍测量
      *
+     * 共享元素的动画
      */
     LookaheadLayout({
         Column {
             Text(
                 "123",
                 Modifier
-//                    .layout { measurable, constraints ->
+//                    .layout { measurable, constraints -> // 第一遍时要执行，但是如果constraints没有变化，其实是会跳过的
 //                        layout()
 //                    }
-                    .intermediateLayout { // 在第二遍测量的时候才会执行
+                    .intermediateLayout { // 在第一遍测量的时候被跳过，在第二遍测量的时候才会执行
                             measurable, constraints, lookaheadSize ->
                         val placeable = measurable.measure(Constraints.fixed(lookaheadSize.width, lookaheadSize.height * 2))
                         layout(placeable.width, placeable.height) {
                             placeable.placeRelative(0, 0)
                         }
                     }
-//                    .layout { measurable, constraints ->
+//                    .layout { measurable, constraints -> // 第一遍时要执行
 //                        layout()
 //                    }
             )
@@ -127,7 +128,7 @@ fun SubcomposeLayoutTest() {
     }
 
     SubcomposeLayout() { constraints ->
-        val measurable = subcompose(1) { // 1组合
+        val measurable = subcompose(1) { // 1组合 ，在组合阶段已经可以拿到constraints了
             Text(text = "")
         }[0]
 
@@ -138,7 +139,7 @@ fun SubcomposeLayoutTest() {
         }
 
         // SubcomposeLayout 提供了在测量过程中去自由地调配一个子界面的各个部分之间的组合、测量、布局过程的调用时机，
-        // 以此来提供动态化布局的功能
+        // 以此来提供  动态化布局 的功能
     }
 
     // eg:1
