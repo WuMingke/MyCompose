@@ -39,7 +39,7 @@ class AnimationActivity2 : ComponentActivity() {
         setContent {
             Column {
                 var shown by remember { mutableStateOf(true) }
-                Crossfade(targetState = shown, animationSpec = tween(3000)) {
+                Crossfade(targetState = shown, animationSpec = tween(3000), label = "") {
                     if (it) {
                         Box(
                             Modifier

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.erkuai.mycompose">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -85,6 +87,12 @@
 
         <activity
             android:name=".basewidget.ModifierActivity"
+            android:exported="true">
+
+        </activity>
+
+        <activity
+            android:name=".museum.LearnMuseumActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
