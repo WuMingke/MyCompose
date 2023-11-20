@@ -74,38 +74,43 @@ fun LookaheadLayoutTest() {
      * 会经历两遍测量
      *
      * 共享元素的动画
+     *
+     * LookaheadLayout 被替换为 LookaheadScope
      */
-    LookaheadLayout({
-        Column {
-            Text(
-                "123",
-                Modifier
-//                    .layout { measurable, constraints -> // 第一遍时要执行，但是如果constraints没有变化，其实是会跳过的
-//                        layout()
-//                    }
-                    .intermediateLayout { // 在第一遍测量的时候被跳过，在第二遍测量的时候才会执行
-                            measurable, constraints, lookaheadSize ->
-                        val placeable = measurable.measure(Constraints.fixed(lookaheadSize.width, lookaheadSize.height * 2))
-                        layout(placeable.width, placeable.height) {
-                            placeable.placeRelative(0, 0)
-                        }
-                    }
-//                    .layout { measurable, constraints -> // 第一遍时要执行
-//                        layout()
-//                    }
-            )
-            Text(text = "456")
-        }
-    }) { measurables, constraints ->
-        val placeables = measurables.map {
-            it.measure(constraints)
-        }
-        val width = placeables.maxOf { it.width }
-        val height = placeables.maxOf { it.height }
-        layout(width, height) {
-            placeables.forEach { it.placeRelative(0, 0) }
-        }
+    LookaheadScope {
+
     }
+//    LookaheadLayout({
+//        Column {
+//            Text(
+//                "123",
+//                Modifier
+////                    .layout { measurable, constraints -> // 第一遍时要执行，但是如果constraints没有变化，其实是会跳过的
+////                        layout()
+////                    }
+//                    .intermediateLayout { // 在第一遍测量的时候被跳过，在第二遍测量的时候才会执行
+//                            measurable, constraints, lookaheadSize ->
+//                        val placeable = measurable.measure(Constraints.fixed(lookaheadSize.width, lookaheadSize.height * 2))
+//                        layout(placeable.width, placeable.height) {
+//                            placeable.placeRelative(0, 0)
+//                        }
+//                    }
+////                    .layout { measurable, constraints -> // 第一遍时要执行
+////                        layout()
+////                    }
+//            )
+//            Text(text = "456")
+//        }
+//    }) { measurables, constraints ->
+//        val placeables = measurables.map {
+//            it.measure(constraints)
+//        }
+//        val width = placeables.maxOf { it.width }
+//        val height = placeables.maxOf { it.height }
+//        layout(width, height) {
+//            placeables.forEach { it.placeRelative(0, 0) }
+//        }
+//    }
 }
 
 @Composable
