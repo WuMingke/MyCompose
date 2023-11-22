@@ -94,6 +94,12 @@
         <activity
             android:name=".museum.LearnMuseumActivity"
             android:exported="true">
+
+        </activity>
+
+        <activity
+            android:name=".githublesson.GithubLessonActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
