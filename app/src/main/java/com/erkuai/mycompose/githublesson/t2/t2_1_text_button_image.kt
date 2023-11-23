@@ -183,6 +183,8 @@ fun ButtonExample() {
             disabledIndicatorColor = Color.Transparent
         ),
     )
+
+    var str by remember { mutableStateOf("") }
 }
 
 @Composable
