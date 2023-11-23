@@ -1,23 +1,6 @@
 # MyCompose
 start compose
 
-### Jetpack Compose Tutorials and Playground
-
-## 🤓 Overview
-
-Series of Tutorials to learn about Jetpack Compose, Material Widgets, State, Animation, and
-Navigation. Easy to search in code and in app. Each chapter module contains its own content in code.
-SearchBar can be used to search with a tag or description available for each tutorial.
-
-Recommended section is under constructions for now, when finished it will get recommended tags using
-previous searches using a database, domain with ViewModel.
-
-<br>
-<div align="center">
-<img src="/./screenshots/intro.gif" align="center" width="32%"/>
-</div>
-
-<br><br><br>
 
 | Tutorial                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  | Preview                                               |
 |:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
