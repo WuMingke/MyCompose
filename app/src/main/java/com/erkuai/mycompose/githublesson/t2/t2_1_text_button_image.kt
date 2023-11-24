@@ -3,6 +3,7 @@ package com.erkuai.mycompose.githublesson.t2
 import android.graphics.Paint
 import android.util.Log
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -47,6 +48,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,6 +62,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toArgb
@@ -78,8 +81,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.erkuai.mycompose.R
-import com.erkuai.mycompose.githublesson.t1.widgets.TutorialHeader
-import com.erkuai.mycompose.githublesson.t1.widgets.TutorialText2
+import com.erkuai.mycompose.githublesson.widgets.TutorialHeader
+import com.erkuai.mycompose.githublesson.widgets.TutorialText2
+import kotlinx.coroutines.delay
 
 @Composable
 fun T2_1_Content() {
@@ -103,25 +107,46 @@ fun T2_1_Content() {
 
 //            BitmapExample()
 //            BitmapExample2()
-            BitmapExample3()
+//            BitmapExample3()
+            BitmapExample4()
 
         }
     }
 }
 
 @Composable
+fun BitmapExample4() {
+    Image(
+        modifier = Modifier
+            .height(100.dp)
+            .width(100.dp),
+        painter = painterResource(id = R.drawable.photo), contentDescription = "",
+        contentScale = ContentScale.Crop,
+    )
+}
+
+@Composable
 fun BitmapExample3() {
+
+    var start by remember { mutableStateOf(false) }
+    val animate = animateFloatAsState(targetValue = if (start) 45f else 0f, label = "")
     Image(
         modifier = Modifier
             .height(100.dp)
             .width(100.dp)
+            .graphicsLayer {
+                rotationX = animate.value
+                rotationY = animate.value
+                rotationZ = animate.value
+            }
             .shadow(8.dp, CircleShape)
             .clip(CircleShape)
-            .width(200.dp),
+            .clickable {
+                start = !start
+            },
         painter = painterResource(id = R.drawable.photo), contentDescription = "",
         contentScale = ContentScale.Crop,
     )
-
 
 }
 

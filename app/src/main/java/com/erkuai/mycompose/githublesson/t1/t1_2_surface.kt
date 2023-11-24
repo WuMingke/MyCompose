@@ -33,8 +33,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.erkuai.mycompose.githublesson.t1.widgets.StyleableTutorialText
-import com.erkuai.mycompose.githublesson.t1.widgets.TutorialHeader
+import com.erkuai.mycompose.githublesson.widgets.StyleableTutorialText
+import com.erkuai.mycompose.githublesson.widgets.TutorialHeader
 
 @Composable
 fun T1_2_Content() {

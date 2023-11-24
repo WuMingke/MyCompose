@@ -7,6 +7,7 @@ import androidx.compose.material.MaterialTheme
 import com.erkuai.mycompose.githublesson.t1.T1_1_Content
 import com.erkuai.mycompose.githublesson.t1.T1_2_Content
 import com.erkuai.mycompose.githublesson.t2.T2_1_Content
+import com.erkuai.mycompose.githublesson.t2.T2_5_1_Content
 
 class GithubLessonActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,7 +15,7 @@ class GithubLessonActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                T2_1_Content()
+                T2_5_1_Content()
             }
         }
     }

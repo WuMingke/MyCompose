@@ -1,4 +1,4 @@
-package com.erkuai.mycompose.githublesson.t1.widgets
+package com.erkuai.mycompose.githublesson.widgets
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding

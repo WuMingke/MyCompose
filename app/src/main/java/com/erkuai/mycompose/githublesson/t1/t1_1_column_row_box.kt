@@ -23,9 +23,9 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.erkuai.mycompose.githublesson.t1.widgets.StyleableTutorialText
-import com.erkuai.mycompose.githublesson.t1.widgets.TutorialHeader
-import com.erkuai.mycompose.githublesson.t1.widgets.TutorialText2
+import com.erkuai.mycompose.githublesson.widgets.StyleableTutorialText
+import com.erkuai.mycompose.githublesson.widgets.TutorialHeader
+import com.erkuai.mycompose.githublesson.widgets.TutorialText2
 
 @Composable
 fun T1_1_Content() {
