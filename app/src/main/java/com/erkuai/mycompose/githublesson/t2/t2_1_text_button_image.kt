@@ -1,8 +1,11 @@
 package com.erkuai.mycompose.githublesson.t2
 
+import android.graphics.Paint
 import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,7 +16,13 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.CutCornerShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.Badge
 import androidx.compose.material.BadgedBox
@@ -27,6 +36,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.IconToggleButton
 import androidx.compose.material.LocalTextStyle
 import androidx.compose.material.OutlinedButton
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.material.TextFieldDefaults
@@ -43,7 +53,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
@@ -52,6 +76,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
+import com.erkuai.mycompose.R
 import com.erkuai.mycompose.githublesson.t1.widgets.TutorialHeader
 import com.erkuai.mycompose.githublesson.t1.widgets.TutorialText2
 
@@ -73,8 +99,81 @@ fun T2_1_Content() {
             TutorialHeader(text = "Button")
             ButtonExample()
 
+            /*****************/
+
+//            BitmapExample()
+//            BitmapExample2()
+            BitmapExample3()
+
         }
     }
+}
+
+@Composable
+fun BitmapExample3() {
+    Image(
+        modifier = Modifier
+            .height(100.dp)
+            .width(100.dp)
+            .shadow(8.dp, CircleShape)
+            .clip(CircleShape)
+            .width(200.dp),
+        painter = painterResource(id = R.drawable.photo), contentDescription = "",
+        contentScale = ContentScale.Crop,
+    )
+
+
+}
+
+@Composable
+fun BitmapExample2() {
+    val bitmap = ImageBitmap.imageResource(id = R.drawable.photo)
+    val onDraw: DrawScope.() -> Unit = {
+        drawImage(bitmap)
+
+        val paint = Paint().apply {
+            textSize = 50f
+            color = Color.Red.toArgb()
+        }
+        drawContext.canvas.nativeCanvas.drawText("android", center.x, center.y, paint)
+    }
+
+
+    val (width, height) = with(LocalDensity.current) {
+        Pair(
+            bitmap.width.toDp(),
+            bitmap.height.toDp()
+        )
+    }
+    Canvas(
+        modifier = Modifier
+            .width(width)
+            .height(height),
+        onDraw = onDraw,
+    )
+}
+
+@Composable
+fun BitmapExample() {
+    TutorialText2(text = "Draw over ImageBitmap with Painter")
+
+    val bitmap = ImageBitmap.imageResource(id = R.drawable.photo)
+    val customPainter = object : Painter() {
+        override val intrinsicSize: Size
+            get() = Size(bitmap.width.toFloat(), bitmap.height.toFloat())
+
+        override fun DrawScope.onDraw() {
+            drawImage(bitmap)
+            drawLine(
+                color = Color.Red,
+                start = Offset(0f, 0f),
+                end = Offset(intrinsicSize.width, intrinsicSize.height),
+                strokeWidth = 5f
+            )
+        }
+
+    }
+    Image(painter = customPainter, contentDescription = "")
 }
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterialApi::class)
@@ -185,6 +284,7 @@ fun ButtonExample() {
     )
 
     var str by remember { mutableStateOf("") }
+
 }
 
 @Composable
