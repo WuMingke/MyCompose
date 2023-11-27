@@ -8,6 +8,11 @@ import com.erkuai.mycompose.githublesson.t1.T1_1_Content
 import com.erkuai.mycompose.githublesson.t1.T1_2_Content
 import com.erkuai.mycompose.githublesson.t2.T2_1_Content
 import com.erkuai.mycompose.githublesson.t2.T2_5_1_Content
+import com.erkuai.mycompose.githublesson.t2.T2_5_2_Content
+import com.erkuai.mycompose.githublesson.t2.T2_5_3_Content
+import com.erkuai.mycompose.githublesson.t2.T2_5_4_Content
+import com.erkuai.mycompose.githublesson.t2.T2_5_5_Content
+import com.erkuai.mycompose.githublesson.t2.T2_5_7_Content
 
 class GithubLessonActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,7 +20,7 @@ class GithubLessonActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme {
-                T2_5_1_Content()
+                T2_5_7_Content()
             }
         }
     }

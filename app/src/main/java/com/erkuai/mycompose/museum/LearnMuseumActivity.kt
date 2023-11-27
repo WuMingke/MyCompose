@@ -122,7 +122,6 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -715,11 +714,11 @@ class LearnMuseumActivity : ComponentActivity() {
             )
         }) {
             Card {
-                androidx.compose.material3.ListItem(
-                    headlineContent = { Text("Cupcake") },
-                    supportingContent = { Text("Swipe me left or right!") }
-                )
-                HorizontalDivider()
+//                ListItem(
+//                    headlineContent = { Text("Cupcake") },
+//                    supportingContent = { Text("Swipe me left or right!") }
+//                )
+//                HorizontalDivider()
             }
         }
     }
